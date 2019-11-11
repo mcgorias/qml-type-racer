@@ -9,6 +9,8 @@ void TypeProgressController::computeProgress()
 {
     progressText="";
     progress=0;
+    good=false;
+
     if(input.isEmpty() || text.isEmpty())
     {
         emitProgressChanged();
@@ -29,10 +31,10 @@ void TypeProgressController::computeProgress()
     progress = static_cast<double>(i)/(base);
     progressText+= coloredText(prgTxt,goodColor);
 
-    if(i<input.length())
-    {
+    good = i>=input.length();
+
+    if(!good)
         progressText += coloredText(input.mid(i),wrongColor);
-    }
 
     emitProgressChanged();
 }
