@@ -20,16 +20,27 @@ Window {
 
         anchors.fill: parent
         spacing: 2
-        ComboBox {
-            model: texts
-            id: textSelector
+        RowLayout{
+            anchors.fill: parent
+            spacing: 2
+            ComboBox {
+                model: texts
+                id: textSelector
+            }
+            Text{
+                id: progress
+                textFormat: Text.RichText
+            }
+
+            Layout.fillHeight: true
+            Layout.fillWidth: true
         }
 
         Rectangle{
             Layout.alignment: Qt.AlignCenter
             Layout.fillHeight: true
             Layout.fillWidth: true
-            //color: "grey"
+
             Text {
                 anchors.top: parent.top
                 anchors.left: parent.left
@@ -46,13 +57,27 @@ Window {
             }
         }
         TypingZone{
+            id: typingZone
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignCenter
-        }
-        Component.onCompleted: {
 
         }
+
     }
+
+    Connections {
+        target : textSelector
+        onCurrentTextChanged: { controller.text = textSelector.currentText;}
+    }
+    Connections {
+        target : typingZone
+        onTextChanged: { controller.input = typingZone.text;}
+    }
+    Connections {
+        target : controller
+        onProgressTextChanged: { progress.text = controller.progressText;}
+    }
+
 
 }

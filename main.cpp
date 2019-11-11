@@ -1,3 +1,5 @@
+#include "typeprogresscontroller.h"
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -15,8 +17,11 @@ int main(int argc, char *argv[])
     texts << "This is a typing race" ;
     texts << "Ceci est une course de frappe";
 
+    TypeProgressController controller;
 
     engine.rootContext()->setContextProperty("texts",texts);
+    engine.rootContext()->setContextProperty("controller",&controller);
+
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
