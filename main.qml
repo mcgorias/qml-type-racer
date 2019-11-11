@@ -36,6 +36,7 @@ Window {
             Layout.fillWidth: true
         }
 
+
         Rectangle{
             Layout.alignment: Qt.AlignCenter
             Layout.fillHeight: true
@@ -56,6 +57,14 @@ Window {
 
             }
         }
+        ProgressBar{
+            id:progressBar
+            from:0
+            to:1
+            value:0
+            Layout.fillWidth: true
+        }
+
         TypingZone{
             id: typingZone
             Layout.fillHeight: true
@@ -76,7 +85,20 @@ Window {
     }
     Connections {
         target : controller
-        onProgressTextChanged: { typingZone.progressText = controller.progressText;}
+        onProgressTextChanged: {
+            typingZone.progressText = controller.progressText;
+            progressBar.value       = controller.progress;
+            if(!controller.good)
+            {
+                progressBar.background.color = "red";
+            }
+            else
+            {
+                progressBar.background.color = "green";
+            }
+
+
+        }
     }
 
 
