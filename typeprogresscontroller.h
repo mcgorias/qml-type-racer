@@ -6,13 +6,13 @@
 class TypeProgressController : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString text         READ getText          WRITE setText )
-    Q_PROPERTY(QString input        READ getInput         WRITE setInput)
-    Q_PROPERTY(QString progressText READ getProgressText                )
-    Q_PROPERTY(QString progress     READ getProgress                    )
+    Q_PROPERTY(QString text         READ getText          WRITE setText                        )
+    Q_PROPERTY(QString input        READ getInput         WRITE setInput                       )
+    Q_PROPERTY(QString progressText READ getProgressText                 NOTIFY progressChanged)
+    Q_PROPERTY(QString progress     READ getProgress                     NOTIFY progressChanged)
 
 public:
-    explicit TypeProgressController(QString text, QObject * parent = nullptr);
+    explicit TypeProgressController(QString text=QString(), QObject * parent = nullptr);
 
     void setText (QString t) {reset(); text=t;}
     void setInput(QString i) {input = i; computeProgress();}
@@ -30,6 +30,8 @@ public:
 
 signals:
 
+    void progressTextChanged(QString);
+    void progressChanged(double );
 public slots:
 
     void computeProgress();
@@ -43,6 +45,8 @@ protected slots:
     }
 
 protected:
+    void emitProgressChanged();
+    static QString coloredText(QString txt,QString color);
     QString input;
     QString text;
     QString progressText;

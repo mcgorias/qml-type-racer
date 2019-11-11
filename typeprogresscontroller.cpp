@@ -1,6 +1,6 @@
 #include "typeprogresscontroller.h"
 
-TypeProgressController::TypeProgressController(QString text, QObject *parent) : QObject(parent),text(text)
+TypeProgressController::TypeProgressController(QString text, QObject *parent) : QObject(parent),text(text),progressText(""),progress(0)
 {
 
 }
@@ -10,28 +10,40 @@ void TypeProgressController::computeProgress()
     progressText="";
     progress=0;
     if(input.isEmpty() || text.isEmpty())
+    {
+        emitProgressChanged();
         return ;
+    }
 
-
-    progressText="<color="+goodColor+">";
     const int base = text.length();
     const int end  = std::min<int>(input.length(), base);
 
+    QString prgTxt;
     int i = 0;
     while(i< end && input.at(i) == text.at(i))
     {
-        progressText.append(input.at(i));
+        prgTxt.append(input.at(i));
         i++;
     }
 
     progress = static_cast<double>(i)/(base);
-    progressText+="</color>";
+    progressText+= coloredText(prgTxt,goodColor);
 
     if(i<input.length())
     {
-        progressText+="<color="+wrongColor+">";
-        progressText+=input.midRef(i);
-        progressText+="</color>";
+        progressText += coloredText(input.mid(i),wrongColor);
     }
 
+    emitProgressChanged();
+}
+
+void TypeProgressController::emitProgressChanged()
+{
+    emit progressChanged(progress);
+    emit progressTextChanged(progressText);
+}
+
+QString TypeProgressController::coloredText(QString txt, QString color)
+{
+    return "<font color='"+color+"'>"+txt+"</font>";
 }
