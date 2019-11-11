@@ -76,7 +76,7 @@ Window {
     }
     Connections {
         target : controller
-        onProgressTextChanged: { progress.text = controller.progressText;}
+        onProgressTextChanged: { typingZone.progressText = controller.progressText;}
     }
 
 
