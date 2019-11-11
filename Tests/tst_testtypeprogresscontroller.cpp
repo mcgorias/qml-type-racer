@@ -15,15 +15,23 @@ private slots:
 
     void computeProgress()
     {
-        TypeProgressController ctrl;
-        ctrl.text = "This is a simple test";
-        QCOMPARE(ctrl.computeProgress("This") , 4/21.);
-        QCOMPARE(ctrl.computeProgress("Thos") , 2/21.);
+        TypeProgressController ctrl("This is a simple test");
 
-        QCOMPARE(ctrl.computeProgressString("")     ,QString(""));
-        QCOMPARE(ctrl.computeProgressString("This") ,QString("<color=green>This</color>"));
-        QCOMPARE(ctrl.computeProgressString("Tazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdahis") ,
-                 QString("<color=green>T</color><color=grey>azdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdahis</color>"));
+        ctrl.setInput("This");
+        QCOMPARE(ctrl.getProgress(), 4/21.);
+        QCOMPARE(ctrl.getProgressText() ,QString("<color=green>This</color>"));
+
+        ctrl.setInput("Thos");
+        QCOMPARE(ctrl.getProgressText(),QString("<color=green>Th</color><color=grey>os</color>"));
+        QCOMPARE(ctrl.getProgress() , 2/21.);
+
+        ctrl.setInput("");
+        QCOMPARE(ctrl.getProgressText(),QString(""));
+        QCOMPARE(ctrl.getProgress() , 0/21.);
+
+        ctrl.setInput("Tazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdahis");
+        QCOMPARE(ctrl.getProgressText() ,QString("<color=green>T</color><color=grey>azdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdahis</color>"));
+        QCOMPARE(ctrl.getProgress(), 1/21.);
     }
 };
 

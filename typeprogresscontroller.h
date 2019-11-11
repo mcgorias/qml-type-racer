@@ -6,20 +6,47 @@
 class TypeProgressController : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString text         READ getText          WRITE setText )
+    Q_PROPERTY(QString input        READ getInput         WRITE setInput)
+    Q_PROPERTY(QString progressText READ getProgressText                )
+    Q_PROPERTY(QString progress     READ getProgress                    )
+
 public:
-    explicit TypeProgressController(QObject *parent = nullptr);
+    explicit TypeProgressController(QString text, QObject * parent = nullptr);
 
-    double computeProgress(QString t) const;
-    QString computeProgressString(QString t) const;
+    void setText (QString t) {reset(); text=t;}
+    void setInput(QString i) {input = i; computeProgress();}
 
-    QString text;
+    QString getText()         const {return text         ;}
+    QString getProgressText() const {return progressText ;}
+    double  getProgress()     const {return progress     ;}
+    QString getInput()        const {return input        ;}
+    QString getGoodColor()    const {return goodColor    ;}
+    QString getWrongColor()   const {return wrongColor   ;}
+
+
     QString goodColor="green";
     QString wrongColor="grey";
+
 signals:
 
 public slots:
 
+    void computeProgress();
 
+protected slots:
+
+    void reset(){
+        input        = "";
+        progressText = "";
+        progress     = 0.;
+    }
+
+protected:
+    QString input;
+    QString text;
+    QString progressText;
+    double  progress;
 
 };
 

@@ -1,44 +1,37 @@
 #include "typeprogresscontroller.h"
 
-TypeProgressController::TypeProgressController(QObject *parent) : QObject(parent)
+TypeProgressController::TypeProgressController(QString text, QObject *parent) : QObject(parent),text(text)
 {
 
 }
 
-double TypeProgressController::computeProgress(QString t) const
+void TypeProgressController::computeProgress()
 {
+    progressText="";
+    progress=0;
+    if(input.isEmpty() || text.isEmpty())
+        return ;
+
+
+    progressText="<color="+goodColor+">";
     const int base = text.length();
-    const int end  = std::min<int>(t.length(), base);
+    const int end  = std::min<int>(input.length(), base);
 
-    int progress = 0;
-    while(progress< end && t.at(progress) == text.at(progress))
-        progress++;
-
-    return progress / static_cast<double>(base);
-}
-
-QString TypeProgressController::computeProgressString(QString t) const
-{
-    if(t.isEmpty())
-        return "" ;
-
-    QString ret="<color="+goodColor+">";
-    const int base = text.length();
-    const int end  = std::min<int>(t.length(), base);
-
-    int progress = 0;
-    while(progress< end && t.at(progress) == text.at(progress))
+    int i = 0;
+    while(i< end && input.at(i) == text.at(i))
     {
-        ret.append(t.at(progress));
-        progress++;
+        progressText.append(input.at(i));
+        i++;
     }
-    ret+="</color>";
-    if(progress<t.length())
-    {
 
-        ret+="<color="+wrongColor+">";
-        ret+=t.midRef(progress);
-        ret+="</color>";
+    progress = static_cast<double>(i)/(base);
+    progressText+="</color>";
+
+    if(i<input.length())
+    {
+        progressText+="<color="+wrongColor+">";
+        progressText+=input.midRef(i);
+        progressText+="</color>";
     }
-    return ret;
+
 }
