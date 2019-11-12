@@ -19,10 +19,10 @@ private slots:
 
         ctrl.setInput("This");
         QCOMPARE(ctrl.getProgress(), 4/21.);
-        QCOMPARE(ctrl.getProgressText() ,QString("<color=green>This</color>"));
+        QCOMPARE(ctrl.getProgressText() ,QString(TypeProgressController::coloredText("This",ctrl.goodColor)));
 
         ctrl.setInput("Thos");
-        QCOMPARE(ctrl.getProgressText(),QString("<color=green>Th</color><color=grey>os</color>"));
+        QCOMPARE(ctrl.getProgressText(),QString(TypeProgressController::coloredText("Th",ctrl.goodColor)+TypeProgressController::coloredText("os",ctrl.wrongColor)));
         QCOMPARE(ctrl.getProgress() , 2/21.);
 
         ctrl.setInput("");
@@ -30,7 +30,8 @@ private slots:
         QCOMPARE(ctrl.getProgress() , 0/21.);
 
         ctrl.setInput("Tazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdahis");
-        QCOMPARE(ctrl.getProgressText() ,QString("<color=green>T</color><color=grey>azdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdahis</color>"));
+
+        QCOMPARE(ctrl.getProgressText(),TypeProgressController::coloredText("T",ctrl.goodColor)+TypeProgressController::coloredText("azdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdazdahis",ctrl.wrongColor));
         QCOMPARE(ctrl.getProgress(), 1/21.);
     }
 };

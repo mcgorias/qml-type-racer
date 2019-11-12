@@ -51,12 +51,14 @@ public:
     QString goodColor="green";
     QString wrongColor="grey";
 
+    static QString coloredText(QString txt,QString color);
 signals:
 
     void progressTextChanged(QString);
     void progressChanged(double);
     void goodChanged(bool);
     void finished();
+
 public slots:
 
     void computeProgress();
@@ -74,7 +76,6 @@ public slots:
 
 protected:
     void emitProgressChanged();
-    static QString coloredText(QString txt,QString color);
     QString input;
     QString text;
     QString progressText;
