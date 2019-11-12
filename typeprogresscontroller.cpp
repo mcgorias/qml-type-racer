@@ -5,8 +5,23 @@ TypeProgressController::TypeProgressController(QString text, QObject *parent) : 
 
 }
 
+QString TypeProgressController::timeElapsed() const {
+
+   QTime t0(0,0,0);
+   auto ref = good ? duration : startTime.elapsed();
+   t0 = t0.addMSecs(ref);
+   QString format = "m:ss.z";
+
+   auto str = t0.toString(format) ;
+
+   return str;
+}
+
 void TypeProgressController::computeProgress()
 {
+    if(over)
+        return;
+
     progressText="";
     progress=0;
     good=false;
@@ -15,6 +30,20 @@ void TypeProgressController::computeProgress()
     {
         emitProgressChanged();
         return ;
+    }
+
+    duration = startTime.elapsed();
+
+    if(input == text)
+    {
+        progress = 1.;
+        good     = true;
+        progressText = coloredText(text,goodColor);
+        over     = true;
+        emitProgressChanged();
+        duration = startTime.elapsed();
+        emit finished();
+        return;
     }
 
     const int base = text.length();

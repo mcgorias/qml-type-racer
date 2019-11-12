@@ -1,7 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Window 2.0
 import QtQuick.Layouts 1.1
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.10
 
 Window {
     visible: true
@@ -21,17 +21,28 @@ Window {
         anchors.fill: parent
         spacing: 2
         RowLayout{
-            anchors.fill: parent
             spacing: 2
+            Button{
+                id: resetBtn
+                icon.name: "view-refresh"
+                Layout.fillWidth: true
+            }
             ComboBox {
                 model: texts
                 id: textSelector
+                Layout.fillWidth: true
             }
             Text{
                 id: progress
                 textFormat: Text.RichText
+                Layout.fillWidth: true
             }
 
+            Text{
+                id: wpm
+                textFormat: Text.RichText
+                Layout.fillWidth: true
+            }
             Layout.fillHeight: true
             Layout.fillWidth: true
         }
@@ -77,29 +88,34 @@ Window {
 
     Connections {
         target : textSelector
-        onCurrentTextChanged: { controller.text = textSelector.currentText;}
+        onCurrentTextChanged: { controller.text = textSelector.currentText; typingZone.reset();}
     }
     Connections {
         target : typingZone
         onTextChanged: { controller.input = typingZone.text;}
     }
+
+    Timer{
+        interval: 200; running: true; repeat: true
+        onTriggered:
+        {
+            progress.text = controller.timeElapsed+ " "+(Math.ceil(controller.progress*100.))+"%";
+            wpm.text      = String(controller.wpm)+" WPM ";
+        }
+    }
     Connections {
         target : controller
         onProgressTextChanged: {
-            typingZone.progressText = controller.progressText;
-            progressBar.value       = controller.progress;
-            if(!controller.good)
-            {
-                progressBar.background.color = "red";
-            }
-            else
-            {
-                progressBar.background.color = "green";
-            }
-
-
+            typingZone.progressText      = controller.progressText;
+            progressBar.value            = controller.progress;
+            progressBar.background.color = controller.good ? "green":"red";
         }
     }
-
+    Connections {
+        target : resetBtn
+        onClicked: {
+           controller.reset();
+        }
+    }
 
 }

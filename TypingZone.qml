@@ -6,6 +6,12 @@ Item {
     property string progressText: ""
     property string lastContent : ""
 
+    function reset(){
+        text         = "";
+        progressText = "";
+        lastContent  = "";
+    }
+
     Rectangle{
         anchors.fill: parent
     }
