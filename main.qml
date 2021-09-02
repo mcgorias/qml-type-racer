@@ -1,7 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Window 2.0
 import QtQuick.Layouts 1.1
-import QtQuick.Controls 2.10
+import QtQuick.Controls 2.2
 
 Window {
     visible: true
@@ -24,8 +24,8 @@ Window {
             spacing: 2
             Button{
                 id: resetBtn
-                icon.name: "view-refresh"
                 Layout.fillWidth: true
+                text: "Reset"
             }
             ComboBox {
                 model: texts
